@@ -14,6 +14,7 @@ if (isset($_GET['opc'])) {
 if (isset($_POST['opc'])) {
     if ($_POST['opc'] == "3") { saveRequest();}
     if ($_POST['opc'] == "5") { editRequest();}
+    if ($_POST['opc'] == "6") { itemQuery();}
 }
 // Principal User Interface
 function ui()
@@ -139,17 +140,19 @@ function queryAdd()
                     <tr>
                         <td align='right'>Requested Items:</td>
                         <td>
-                            <select name='item[]' required>
+                        <select id='itemType' name='itemType' required >
                             <option value=''>Select</option>";
                             //show items
-                            $exec = mysqli_query($conn, "SELECT * from items");
-                            $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+                            $query = mysqli_query($conn, "SELECT * from item_type");
+                            $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
                             foreach ($row as $data) {
-                            echo "<option value='".$data['id']."'>".$data['item']."</option>";
+                            echo "<option value='".$data['id']."'>".$data['type']."</option>";
                             }
-                            mysqli_free_result($exec);
+                            mysqli_free_result($query);
                             echo "
-                            </select>
+                        </select>
+                        <div id='add-itemType'>sdfsf</div>
+                        <!--<div class='heading'>Some Name<img src='loading.gif' style='visibility:hidden'></div>-->
                         </td>
                         <td align='left'>
                             <button id='addMore' type='button' class='btn btn-secondary'>Add more</button>
@@ -165,6 +168,20 @@ function queryAdd()
                 </tfoot>
         </table>
     </form>";
+}
+//////////
+function itemQuery(){
+    global $conn;
+    echo "<select name='item[]' id='item' required>
+    <option value=''>Select</option>";
+    $query = "SELECT * from items where item_type='$_POST[itemType]'";
+    $exec = mysqli_query($conn, $query);
+    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+    foreach ($row as $data) {
+        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
+    }
+    echo"</select>";
+    mysqli_free_result($exec);
 }
 //interface for edit request
 function queryEdit()

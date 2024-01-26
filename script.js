@@ -25,7 +25,7 @@ $(document).on('click','#showData',function(e){
                 $('#table-add').hide();
                 $('#message').show();
                 $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
-                $.ajax({
+                /*$.ajax({
                   type: "GET",
                   url: "index.php",
                   data: {
@@ -36,7 +36,7 @@ $(document).on('click','#showData',function(e){
                     $('#container').show();
                     $('#container').html(data);
                   }
-                });
+                });*/
               }
             });
           }
@@ -44,7 +44,42 @@ $(document).on('click','#showData',function(e){
       }
     });
 });
-$(document).on('click','#editData',function(e){
+//function itemQuery(e){
+//$("#itemType").on('change', function(e) {
+//$(document).on('change','#itemType',function(e){
+$(document).on('change', '#itemType', function() {
+  //itemtype=$("#itemType").val();
+  //document.getElementById('itemType').nextElementSibling.innerHTML;
+  
+  //let nextSibling = div.val();     
+  console.log('div:'+document.getElementById('itemType').nextElementSibling.innerHTML);
+
+  //$(this).parent('td').attr('data-id');
+  //document.getElementById('itemType').nextSibling;
+  //itemtype=$(this).val();
+  $.ajax({
+    type: "POST",
+    url: "index.php",
+    data: {
+    'opc': 6,
+    'itemType': $(this).val()
+    },
+    dataType: "html",
+    success: function(data){
+      //$(this).parent()
+      //$(this).parent().next('.itemType').show('asdad');
+      //$(this).next('#add-itemType').show('asdad');
+      
+      $('#xx').html(data);
+      //let divx=document.getElementById('itemType').parent().nextElementSibling;
+      //divx.html(data);
+      //document.getElementById('itemType').nextElementSibling.html(data);
+      //$(nextSibling).html(data);
+      //$(this).html(data);
+    }
+  });
+});
+$(document).on('click','#editData',function(){
   let req_id=$(this).parent('td').attr('data-id');
   $.ajax({
     type: "GET",
@@ -92,6 +127,7 @@ $(document).on('click','#editData',function(e){
 //clone de tr
 $(document).on('click','#addMore',function(){
     let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
+    let klon = newRow.prop('id', 'xx' );
 });
 $(document).on('click','#remove',function(){
   let removeRow=$(this).parents("tr").remove();
