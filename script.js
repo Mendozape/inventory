@@ -74,7 +74,7 @@ $(document).on('change', '#itemType', function() {
       //$(this).parent().next('.itemType').show('asdad');
       //$(this).next('#add-itemType').show('asdad');
       
-      $('#add-itemType').html(data);
+      $('#xxx').html(data);
       //let divx=document.getElementById('itemType').parent().nextElementSibling;
       //divx.html(data);
       //document.getElementById('itemType').nextElementSibling.html(data);
@@ -89,7 +89,8 @@ $(document).on('click','#addMore',function(){
   let klon = newRow.prop('id', 'xx' );
    //newRow. 
   //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
-  let a= document.getElementById('xx').children[1].children;
+  let a= document.getElementById('xx').children[1].children[1];
+  let aa = a.prop('id', 'xxx' );
   //a.prop('id','yy');
  
   console.log(a);
