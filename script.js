@@ -48,11 +48,15 @@ $(document).on('click','#showData',function(e){
 //$("#itemType").on('change', function(e) {
 //$(document).on('change','#itemType',function(e){
 $(document).on('change', '#itemType', function() {
-  //itemtype=$("#itemType").val();
-  //document.getElementById('itemType').nextElementSibling.innerHTML;
   
-  //let nextSibling = div.val();     
-  console.log('div:'+document.getElementById('itemType').nextElementSibling.innerHTML);
+  //itemtype=$("#itemType").val();
+  //let a= document.getElementById('itemType').nextElementSibling.innerHTML;
+  //var b =  document.getElementById('itemType');
+      //b.closest("#add-itemTypex");
+  //let nextSibling = div.val();
+  //let c=$(this).nextElementSibling.innerHTML;
+  let ma= document.getElementById($(this)).nextElementSibling.innerHTML;
+  console.log('div:'+ ma);
 
   //$(this).parent('td').attr('data-id');
   //document.getElementById('itemType').nextSibling;
@@ -70,7 +74,7 @@ $(document).on('change', '#itemType', function() {
       //$(this).parent().next('.itemType').show('asdad');
       //$(this).next('#add-itemType').show('asdad');
       
-      $('#xx').html(data);
+      $('#add-itemType').html(data);
       //let divx=document.getElementById('itemType').parent().nextElementSibling;
       //divx.html(data);
       //document.getElementById('itemType').nextElementSibling.html(data);
@@ -79,6 +83,19 @@ $(document).on('change', '#itemType', function() {
     }
   });
 });
+//clone de tr
+$(document).on('click','#addMore',function(){
+  let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
+  let klon = newRow.prop('id', 'xx' );
+   //newRow. 
+  //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
+  let a= document.getElementById('xx').children[1].children;
+  //a.prop('id','yy');
+ 
+  console.log(a);
+});
+
+
 $(document).on('click','#editData',function(){
   let req_id=$(this).parent('td').attr('data-id');
   $.ajax({
@@ -124,14 +141,9 @@ $(document).on('click','#editData',function(){
     }
   });
 });
-//clone de tr
-$(document).on('click','#addMore',function(){
-    let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
-    let klon = newRow.prop('id', 'xx' );
-});
+
 $(document).on('click','#remove',function(){
   let removeRow=$(this).parents("tr").remove();
-});
-
+  });
 
 

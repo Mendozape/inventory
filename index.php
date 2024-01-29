@@ -118,41 +118,43 @@ function queryAdd()
         <table id='example2'   border='1' style='width:100%' class='table table-success table-striped'>
                 <thead>
                     <tr>
-                        <td colspan='3' align='center' class='bg-secondary'><h3>Add Request</h3></td>
+                        <td colspan='4' align='center' class='bg-secondary'><h3>Add Request</h3></td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td align='right'>User:</td>
-                        <td colspan='2'>
-                        <select id='user' name='user' required>
-                            <option value=''>Select</option>";
-                            //show users
-                            $exec = mysqli_query($conn, $query = "SELECT * from users");
-                            $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-                            foreach ($row as $data) {
-                                echo "<option value='". $data['user'] ."'>".$data['user'] . "</option>";
-                            }
-                            echo "
-                        </select>
+                        <td colspan='3'>
+                            <select id='user' name='user' required>
+                                <option value=''>Select</option>";
+                                //show users
+                                $exec = mysqli_query($conn, $query = "SELECT * from users");
+                                $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+                                foreach ($row as $data) {
+                                    echo "<option value='". $data['user'] ."'>".$data['user'] . "</option>";
+                                }
+                                echo "
+                            </select>
                         </td>
                     </tr>
                     <tr>
                         <td align='right'>Requested Items:</td>
                         <td>
-                        <select id='itemType' name='itemType' required >
-                            <option value=''>Select</option>";
-                            //show items
-                            $query = mysqli_query($conn, "SELECT * from item_type");
-                            $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                            foreach ($row as $data) {
-                            echo "<option value='".$data['id']."'>".$data['type']."</option>";
-                            }
-                            mysqli_free_result($query);
-                            echo "
-                        </select>
-                        <div id='add-itemType'>sdfsf</div>
-                        <!--<div class='heading'>Some Name<img src='loading.gif' style='visibility:hidden'></div>-->
+                            <select id='itemType' name='itemType' required >
+                                <option value=''>Select</option>";
+                                //show items
+                                $query = mysqli_query($conn, "SELECT * from item_type");
+                                $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+                                foreach ($row as $data) {
+                                echo "<option value='".$data['id']."'>".$data['type']."</option>";
+                                }
+                                mysqli_free_result($query);
+                                echo "
+                            </select>
+                            <div id='add-itemTypex'>testingxx</div>
+                        </td>
+                        <td>
+                            <div id='add-itemType'>tes</div>
                         </td>
                         <td align='left'>
                             <button id='addMore' type='button' class='btn btn-secondary'>Add more</button>
@@ -161,7 +163,7 @@ function queryAdd()
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan='3' class='text-center'>
+                        <td colspan='4' class='text-center'>
                             <input type='submit'  value='Save' class='btn btn-primary w-25'  id='save'>
                         </td>
                     </tr>
