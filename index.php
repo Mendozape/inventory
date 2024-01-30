@@ -203,35 +203,40 @@ function queryEdit()
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td align='right'>User:</td>
-                        <td colspan='2'>
-                        <select id='user' name='user' required>
-                            <option value=''>Select</option>";
-                            //show users and select when is equal to db
-                            $query = mysqli_query($conn, $query = "SELECT * from users");
-                            $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                            foreach ($row as $data) {
-                                echo "<option value='". $data['user'] ."'"; if($data['user']==$requested_by){ echo "selected";  } echo">" . $data['id'] . '.-' . $data['user'] ."</option>";
-                            }
-                        echo "
-                        </select>
+                    <tr
+                        <td align='center'>User:</td>
+                        <td colspan='3'>
+                            <select id='user' name='user' required>
+                                <option value=''>Select</option>";
+                                //show users and select when is equal to db
+                                $query = mysqli_query($conn, "SELECT * from users");
+                                $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+                                foreach ($row as $data) {
+                                    echo "<option value='". $data['user'] ."'"; if($data['user']==$requested_by){ echo "selected";  } echo">" . $data['id'] . '.-' . $data['user'] ."</option>";
+                                }
+                            echo "
+                            </select>
                         </td>
                     </tr>";
+                    $item_typex='';
                     foreach ($items as $dataItems) {
+                        $query2 = mysqli_query($conn, "SELECT * from items where id='$dataItems' ");
+                        $row2 = mysqli_fetch_all($query2, MYSQLI_ASSOC);
+                        //$item_type=$row2['item_type'];
                         echo"<tr>
-                            <td align='right'>Requested Items:</td>
+                            <td align='right'>
+                                Requested Items:
+                            </td>
                             <td>
-                                <select name='item[]' required>
-                                <option value=''>Select</option>";
-                                 //show requested items and select when is equal to db
-                                $query = mysqli_query($conn, "SELECT * from items");
-                                $row2 = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                                foreach ($row2 as $data2) {
-                                    echo "<option value='". $data2['id'] ."'"; if($data2['id']==$dataItems){ echo "selected";  } echo">".$data2['item']."</option>";
-                                }
-                                //mysqli_free_result($result);
-                                echo"
+                                <select id='itemType' name='itemType' required >
+                                    <option value=''>Select</option>";
+                                    //show items
+                                    $query3 = mysqli_query($conn, "SELECT * from item_type");
+                                    $row3 = mysqli_fetch_all($query3, MYSQLI_ASSOC);
+                                    foreach ($row3 as $data3) {
+                                        echo "<option value='". $data3['id'] ."'"; if($data3['id'] == $row2['item_type']){ echo "selected";  } echo">".$data3['type']."</option>";
+                                    }
+                                    echo "
                                 </select>
                             </td>
                             <td align='left'>
@@ -240,7 +245,7 @@ function queryEdit()
                             </td>
                         </tr>";
                     }
-                    mysqli_free_result($query);
+                    
                 echo"
                 </tbody>
                 <tfoot>
