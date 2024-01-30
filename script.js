@@ -10,10 +10,20 @@ $(document).on('click','#showData',function(e){
       },
       dataType: "html",
       success: function(data){
+        
+
         $('#table-edit').hide();
         $('#message').hide();
         $('#table-add').show();
         $('#table-add').html(data);
+
+        let table = document.getElementById('example2');
+        let totalRowCount = table.rows.length;
+        let r=document.getElementById('itemType').nextElementSibling;
+        r.setAttribute('id','div'+totalRowCount);
+        //console.log(document.getElementById('div4'));
+
+               
         $("#add_form").validate({
           submitHandler: function() {
             $.ajax({
@@ -22,6 +32,8 @@ $(document).on('click','#showData',function(e){
               data:$('#add_form').serialize() + '&opc=' + 3,
               dataType: "html",
               success: function(data){
+                
+                
                 $('#table-add').hide();
                 $('#message').show();
                 $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
@@ -47,7 +59,7 @@ $(document).on('click','#showData',function(e){
 //function itemQuery(e){
 //$("#itemType").on('change', function(e) {
 //$(document).on('change','#itemType',function(e){
-$(document).on('change', '#itemType', function() {
+$(document).on('change', '#itemType', function(e) {
   
   //itemtype=$("#itemType").val();
   //let a= document.getElementById('itemType').nextElementSibling.innerHTML;
@@ -55,8 +67,8 @@ $(document).on('change', '#itemType', function() {
       //b.closest("#add-itemTypex");
   //let nextSibling = div.val();
   //let c=$(this).nextElementSibling.innerHTML;
-  let ma= document.getElementById($(this)).nextElementSibling.innerHTML;
-  console.log('div:'+ ma);
+  //let ma= document.getElementById($(this)).nextElementSibling.innerHTML;
+  //console.log('div:'+ ma);
 
   //$(this).parent('td').attr('data-id');
   //document.getElementById('itemType').nextSibling;
@@ -72,9 +84,18 @@ $(document).on('change', '#itemType', function() {
     success: function(data){
       //$(this).parent()
       //$(this).parent().next('.itemType').show('asdad');
-      //$(this).next('#add-itemType').show('asdad');
       
-      $('#xxx').html(data);
+      //let s=document.documentElement.parentElement;
+      //console.log(s);
+      //$(this).next('#add-itemType').show('asdad');
+      let table = document.getElementById('example2');
+      let totalRowCount = table.rows.length;
+
+      let f=e.currentTarget.nextElementSibling;
+      //console.log(f);
+      //let x='#div'+totalRowCount;
+      //console.log(x);
+      $(f).html(data);
       //let divx=document.getElementById('itemType').parent().nextElementSibling;
       //divx.html(data);
       //document.getElementById('itemType').nextElementSibling.html(data);
@@ -85,15 +106,21 @@ $(document).on('change', '#itemType', function() {
 });
 //clone de tr
 $(document).on('click','#addMore',function(){
+  
+  //let cuerpo=document.getElementById('cuerpo').childElementCount;
   let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
-  let klon = newRow.prop('id', 'xx' );
-   //newRow. 
+  let table = document.getElementById('example2');
+  let totalRowCount = table.rows.length;
+  //newRow.setAttribute('id','tr'+totalRowCount);
+  //a.setAttribute('id','div'+totalRowCount);
+  newRow.prop('id', 'tr'+totalRowCount );
   //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
-  let a= document.getElementById('xx').children[1].children[1];
-  let aa = a.prop('id', 'xxx' );
+  let a= document.getElementById('tr'+totalRowCount).children[1].children[1];
+  a.setAttribute('id','div'+totalRowCount);
+  //let aa = a.nodeValue='xxx';
   //a.prop('id','yy');
  
-  console.log(a);
+  //console.log(totalRowCount);
 });
 
 

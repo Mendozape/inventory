@@ -118,13 +118,13 @@ function queryAdd()
         <table id='example2'   border='1' style='width:100%' class='table table-success table-striped'>
                 <thead>
                     <tr>
-                        <td colspan='4' align='center' class='bg-secondary'><h3>Add Request</h3></td>
+                        <td colspan='3' align='center' class='bg-secondary'><h3>Add Request</h3></td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id='cuerpo'>
                     <tr>
                         <td align='right'>User:</td>
-                        <td colspan='3'>
+                        <td colspan='2'>
                             <select id='user' name='user' required>
                                 <option value=''>Select</option>";
                                 //show users
@@ -151,10 +151,7 @@ function queryAdd()
                                 mysqli_free_result($query);
                                 echo "
                             </select>
-                            <div id='add-itemTypex'>testingxx</div>
-                        </td>
-                        <td>
-                            <div id='add-itemType'>tes</div>
+                            <div></div>
                         </td>
                         <td align='left'>
                             <button id='addMore' type='button' class='btn btn-secondary'>Add more</button>
@@ -163,7 +160,7 @@ function queryAdd()
                 </tbody>
                 <tfoot>
                     <tr>
-                        <td colspan='4' class='text-center'>
+                        <td colspan='3' class='text-center'>
                             <input type='submit'  value='Save' class='btn btn-primary w-25'  id='save'>
                         </td>
                     </tr>
