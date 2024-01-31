@@ -10,30 +10,42 @@ $(document).on('click','#showData',function(e){
       },
       dataType: "html",
       success: function(data){
-        
-
         $('#table-edit').hide();
         $('#message').hide();
         $('#table-add').show();
         $('#table-add').html(data);
-
+        //set id to the div based on rows number
         let table = document.getElementById('example2');
         let totalRowCount = table.rows.length;
         let r=document.getElementById('itemType').nextElementSibling;
         r.setAttribute('id','div'+totalRowCount);
         //console.log(document.getElementById('div4'));
-
-               
+        
         $("#add_form").validate({
+          
           submitHandler: function() {
+            //let a = $( ":input" );
+           
+            //alert('adsa:'+a.length);
+            //console.log(a);
+            //let a =$("select>option").parent();
+            //let a =$('select').not(':has(option:selected)');
+            
+            var count = 0;
+            $("select").each(function() {
+                if(this.value === ''){
+                    count++
+                }
+            });
+            if (count > 0) {
+               alert('faltar seleccionar');
+            }
             $.ajax({
               url: "index.php",
               type: "POST",
               data:$('#add_form').serialize() + '&opc=' + 3,
               dataType: "html",
               success: function(data){
-                
-                
                 $('#table-add').hide();
                 $('#message').show();
                 $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
@@ -57,37 +69,7 @@ $(document).on('click','#showData',function(e){
     });
 });
 
-$(document).on('change', '#itemType', function(e) {
-  $.ajax({
-    type: "POST",
-    url: "index.php",
-    data: {
-    'opc': 6,
-    'itemType': $(this).val()
-    },
-    dataType: "html",
-    success: function(data){
-      //get div next to the itemType
-      $(e.currentTarget.nextElementSibling).html(data);
-    }
-  });
-});
-
-
-
-//clone de tr
-$(document).on('click','#addMore',function(){
-  //let cuerpo=document.getElementById('cuerpo').childElementCount;
-  let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
-  let table = document.getElementById('example2');
-  let totalRowCount = table.rows.length;
-  newRow.prop('id', 'tr'+totalRowCount );
-  //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
-  let a= document.getElementById('tr'+totalRowCount).children[1].children[1];
-  a.setAttribute('id','div'+totalRowCount);
-});
-
-
+///////////////Edit request
 $(document).on('click','#editData',function(){
   let req_id=$(this).parent('td').attr('data-id');
   $.ajax({
@@ -132,6 +114,34 @@ $(document).on('click','#editData',function(){
       });
     }
   });
+});
+
+//get data on change Item Type
+$(document).on('change', '#itemType', function(e) {
+  $.ajax({
+    type: "POST",
+    url: "index.php",
+    data: {
+    'opc': 6,
+    'itemType': $(this).val()
+    },
+    dataType: "html",
+    success: function(data){
+      //get div next to the itemType
+      $(e.currentTarget.nextElementSibling).html(data);
+    }
+  });
+});
+
+//clone de tr
+$(document).on('click','#addMore',function(){
+  //let cuerpo=document.getElementById('cuerpo').childElementCount;
+  let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
+  let table = document.getElementById('example2');
+  let totalRowCount = table.rows.length;
+  newRow.prop('id', 'tr'+totalRowCount );
+  let a= document.getElementById('tr'+totalRowCount).children[1].children[1];
+  a.setAttribute('id','div'+totalRowCount);
 });
 
 $(document).on('click','#remove',function(){

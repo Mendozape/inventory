@@ -15,7 +15,6 @@ if (isset($_POST['opc'])) {
     if ($_POST['opc'] == "3") { saveRequest();}
     if ($_POST['opc'] == "5") { editRequest();}
     if ($_POST['opc'] == "6") { itemQuery();}
-    if ($_POST['opc'] == "7") { itemQueryEdit();}
 }
 // Principal User Interface
 function ui()
@@ -126,7 +125,7 @@ function queryAdd()
                     <tr>
                         <td align='right'>User:</td>
                         <td colspan='2'>
-                            <select id='user' name='user' required>
+                            <select id='user' name='user' >
                                 <option value=''>Select</option>";
                                 //show users
                                 $exec = mysqli_query($conn, $query = "SELECT * from users");
@@ -141,7 +140,7 @@ function queryAdd()
                     <tr>
                         <td align='right'>Requested Items:</td>
                         <td>
-                            <select id='itemType' name='itemType' required >
+                            <select class='teamInput' id='itemType' name='itemType[]'>
                                 <option value=''>Select</option>";
                                 //show items
                                 $query = mysqli_query($conn, "SELECT * from item_type");
@@ -172,7 +171,7 @@ function queryAdd()
 //////////
 function itemQuery(){
     global $conn;
-    echo "<select name='item[]' id='item' required>
+    echo "<select id='item' name='item[]' >
     <option value=''>Select</option>";
     $query = "SELECT * from items where item_type='$_POST[itemType]'";
     $exec = mysqli_query($conn, $query);
@@ -183,20 +182,7 @@ function itemQuery(){
     echo"</select>";
     mysqli_free_result($exec);
 }
-//////////
-function itemQueryEdit(){
-    global $conn;
-    echo "<select name='item[]' id='item' required>
-    <option value=''>Select</option>";
-    $query = "SELECT * from items where item_type='$_POST[itemType]'";
-    $exec = mysqli_query($conn, $query);
-    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-    foreach ($row as $data) {
-        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
-    }
-    echo"</select>";
-    mysqli_free_result($exec);
-}
+
 //interface for edit request
 function queryEdit()
 {
@@ -237,23 +223,35 @@ function queryEdit()
                     foreach ($items as $dataItems) {
                         $query = "SELECT * from items where id='$dataItems' ";
                         $result = $conn->query($query);
-                        $row2 = $result->fetch_array(MYSQLI_ASSOC);
+                        $row = $result->fetch_array(MYSQLI_ASSOC);
+                        $item_type=$row['item_type'];
+                        $item=$row['id'];
                         echo"<tr>
                             <td align='right'>
                                 Requested Items:
                             </td>
                             <td>
-                                <select id='itemType' name='itemType' required >
+                                <select id='itemType' name='itemType[]' required >
                                     <option value=''>Select</option>";
                                     //show items
-                                    $query3 = mysqli_query($conn, "SELECT * from item_type");
-                                    $row3 = mysqli_fetch_all($query3, MYSQLI_ASSOC);
-                                    foreach ($row3 as $data3) {
-                                        echo "<option value='". $data3['id'] ."'"; if($data3['id']==$row2['item_type']){ print "selected";  } echo">".$data3['type']."</option>";
+                                    $query2 = mysqli_query($conn, "SELECT * from item_type");
+                                    $row2 = mysqli_fetch_all($query2, MYSQLI_ASSOC);
+                                    foreach ($row2 as $data) {
+                                        echo "<option value='". $data['id'] ."'"; if($data['id']==$item_type){ print "selected";  } echo">".$data['type']."</option>";
                                     }
                                     echo "
                                 </select>
-                                <div></div>
+                                <div>
+                                    <select name='item[]' id='item[]' required>
+                                    <option value=''>Select--$dataItems</option>";
+                                    $query3 = "SELECT * from items where item_type='$item_type'";
+                                    $result3 = mysqli_query($conn, $query3);
+                                    $row3 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
+                                    foreach ($row3 as $data) {
+                                        echo "<option value='" . $data['id'] . "'"; if($data['id']==$dataItems){ print "selected";  } echo">" . $data['item'] . "</option>";
+                                    }
+                                    echo"</select>
+                                </div>
                             </td>
                             <td align='left'>
                                 <button id='addMore' type='button' class='btn btn-secondary'>Add more</button>
