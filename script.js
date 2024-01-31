@@ -56,23 +56,8 @@ $(document).on('click','#showData',function(e){
       }
     });
 });
-//function itemQuery(e){
-//$("#itemType").on('change', function(e) {
-//$(document).on('change','#itemType',function(e){
-$(document).on('change', '#itemType', function(e) {
-  
-  //itemtype=$("#itemType").val();
-  //let a= document.getElementById('itemType').nextElementSibling.innerHTML;
-  //var b =  document.getElementById('itemType');
-      //b.closest("#add-itemTypex");
-  //let nextSibling = div.val();
-  //let c=$(this).nextElementSibling.innerHTML;
-  //let ma= document.getElementById($(this)).nextElementSibling.innerHTML;
-  //console.log('div:'+ ma);
 
-  //$(this).parent('td').attr('data-id');
-  //document.getElementById('itemType').nextSibling;
-  //itemtype=$(this).val();
+$(document).on('change', '#itemType', function(e) {
   $.ajax({
     type: "POST",
     url: "index.php",
@@ -82,45 +67,24 @@ $(document).on('change', '#itemType', function(e) {
     },
     dataType: "html",
     success: function(data){
-      //$(this).parent()
-      //$(this).parent().next('.itemType').show('asdad');
-      
-      //let s=document.documentElement.parentElement;
-      //console.log(s);
-      //$(this).next('#add-itemType').show('asdad');
-      let table = document.getElementById('example2');
-      let totalRowCount = table.rows.length;
-
-      let f=e.currentTarget.nextElementSibling;
-      //console.log(f);
-      //let x='#div'+totalRowCount;
-      //console.log(x);
-      $(f).html(data);
-      //let divx=document.getElementById('itemType').parent().nextElementSibling;
-      //divx.html(data);
-      //document.getElementById('itemType').nextElementSibling.html(data);
-      //$(nextSibling).html(data);
-      //$(this).html(data);
+      //get div next to the itemType
+      $(e.currentTarget.nextElementSibling).html(data);
     }
   });
 });
+
+
+
 //clone de tr
 $(document).on('click','#addMore',function(){
-  
   //let cuerpo=document.getElementById('cuerpo').childElementCount;
   let newRow=$(this).parents("tr").clone().insertAfter($(this).parents("tr"));
   let table = document.getElementById('example2');
   let totalRowCount = table.rows.length;
-  //newRow.setAttribute('id','tr'+totalRowCount);
-  //a.setAttribute('id','div'+totalRowCount);
   newRow.prop('id', 'tr'+totalRowCount );
   //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
   let a= document.getElementById('tr'+totalRowCount).children[1].children[1];
   a.setAttribute('id','div'+totalRowCount);
-  //let aa = a.nodeValue='xxx';
-  //a.prop('id','yy');
- 
-  //console.log(totalRowCount);
 });
 
 
