@@ -115,7 +115,8 @@ function queryAdd()
     global $conn;
     echo "
     <form action='' method=POST id='add_form'  >
-        <table id='example2'   border='1' style='width:100%' class='table table-success table-striped'>
+    <table id='example2'   border='1' style='width:100%' >
+    <!--<table id='example2'   border='1' style='width:100%'>-->
                 <thead>
                     <tr>
                         <td colspan='3' align='center' class='bg-secondary'><h3>Add Request</h3></td>
@@ -135,6 +136,7 @@ function queryAdd()
                                 }
                                 echo "
                             </select>
+                            <div class='valid-feedback'>Looks good!</div>
                         </td>
                     </tr>
                     <tr>

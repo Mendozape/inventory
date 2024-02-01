@@ -10,6 +10,11 @@ $(document).on('click','#showData',function(e){
       },
       dataType: "html",
       success: function(data){
+        //$(this).addClass("test");
+        
+        //$('#example2').removeClass('table');
+        //$('#example2').removeClass("test");
+        //document.removeAttribute('style');
         $('#table-edit').hide();
         $('#message').hide();
         $('#table-add').show();
@@ -17,52 +22,72 @@ $(document).on('click','#showData',function(e){
         //set id to the div based on rows number
         let table = document.getElementById('example2');
         let totalRowCount = table.rows.length;
-        let r=document.getElementById('itemType').nextElementSibling;
-        r.setAttribute('id','div'+totalRowCount);
-        //console.log(document.getElementById('div4'));
+        let div=document.getElementById('itemType').nextElementSibling;
+        let tr=document.getElementById('itemType').parentElement.parentElement;
+        div.setAttribute('id','div'+totalRowCount);
+        tr.setAttribute('id','tr'+totalRowCount);
         
+        
+        /*table.classList.add('table');
+        table.classList.add('table-success');
+        table.classList.add('table-striped');*/
+        
+
+        //console.log(table);
+        //alert('asd');
+        //console.log(document.getElementById('div4'));
         $("#add_form").validate({
-          
           submitHandler: function() {
-            //let a = $( ":input" );
+           //table.removeAttribute('bgcolor','red');
            
-            //alert('adsa:'+a.length);
-            //console.log(a);
-            //let a =$("select>option").parent();
-            //let a =$('select').not(':has(option:selected)');
-            
-            var count = 0;
+        /*table.classList.remove('table');
+        table.classList.remove('table-success');
+        table.classList.remove('table-striped');*/
+        /*$("tr").each(function() {
+          this.setAttribute("style", "background-color:red;");
+        });*/
+             
+            let count = 0;
             $("select").each(function() {
                 if(this.value === ''){
                     count++
+                    let f=this.parentElement.parentElement;
+                    f.setAttribute("style", "background-color:red;");
+                    //f.style.backgroundColor='red';
+                    //document.getElementById('tr4').style.backgroundColor='red';
+                    
                 }
             });
             if (count > 0) {
-               alert('faltar seleccionar');
+              $('#error').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
+              return false;
+            }else{
+              //console.log(a);
+              $.ajax({
+                url: "index.php",
+                type: "POST",
+                data:$('#add_form').serialize() + '&opc=' + 3,
+                dataType: "html",
+                success: function(data){
+                  $('#table-add').hide();
+                  $('#message').show();
+                  $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
+                  /*$.ajax({
+                    type: "GET",
+                    url: "index.php",
+                    data: {
+                      'opc': 1
+                    },
+                    dataType: "html",
+                    success: function(data){
+                      $('#container').show();
+                      $('#container').html(data);
+                    }
+                  });*/
+                }
+              });
             }
-            $.ajax({
-              url: "index.php",
-              type: "POST",
-              data:$('#add_form').serialize() + '&opc=' + 3,
-              dataType: "html",
-              success: function(data){
-                $('#table-add').hide();
-                $('#message').show();
-                $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
-                /*$.ajax({
-                  type: "GET",
-                  url: "index.php",
-                  data: {
-                    'opc': 1
-                  },
-                  dataType: "html",
-                  success: function(data){
-                    $('#container').show();
-                    $('#container').html(data);
-                  }
-                });*/
-              }
-            });
+            
           }
         });
       }
@@ -128,9 +153,16 @@ $(document).on('change', '#itemType', function(e) {
     dataType: "html",
     success: function(data){
       //get div next to the itemType
+      let f=e.currentTarget.parentElement.parentElement.setAttribute("style", "background-color:white;");
       $(e.currentTarget.nextElementSibling).html(data);
     }
   });
+});
+$(document).on('change', '#item', function(e) {
+    let ff=e.currentTarget.parentElement.parentElement.setAttribute("style", "background-color:white;")
+});
+$(document).on('change', '#user', function(e) {
+  let ff=e.currentTarget.parentElement.parentElement.setAttribute("style", "background-color:white;")
 });
 
 //clone de tr
@@ -140,6 +172,7 @@ $(document).on('click','#addMore',function(){
   let table = document.getElementById('example2');
   let totalRowCount = table.rows.length;
   newRow.prop('id', 'tr'+totalRowCount );
+  //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
   let a= document.getElementById('tr'+totalRowCount).children[1].children[1];
   a.setAttribute('id','div'+totalRowCount);
 });
