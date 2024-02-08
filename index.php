@@ -147,12 +147,13 @@ function queryAdd()
     global $conn;
     echo "
 <div class='container ' id='InvRows'>
-<h2>Add Request</h2>
+    
+    <h2 class='text-center bg-info border col-md-12' >Add Request</h2>
     <form id='add_form' class='needs-validation' novalidate>
-                <div class='row '  > 
-                    <div class='form-group col-md-4'>
+                <div class='row border '  > 
+                    <div class=' col-md-4  '>
                         <label for='user'>User:</label>
-                        <select class='form-control' id='user' name='user' required>
+                        <select class='form-control mb-2' id='user' name='user' required>
                             <option value=''>Select</option>";
                             //show users
                             $exec = mysqli_query($conn, $query = "SELECT * from users");
@@ -168,9 +169,9 @@ function queryAdd()
                     </div>
                 </div>
                 <div class='row border '  >
-                    <div class='form-group d-inline col-md-4 border'>
-                    <label for='itemType'>itemType:</label>
-                        <select class='form-control' id='itemType' name='itemType' required>
+                    <div class='col-md-4 '>
+                        <label for='itemType'>itemType:</label>
+                        <select class='form-control mb-2' id='itemType' name='itemType' required>
                             <option value=''>Select Item</option>";
                             //show items
                             $query = mysqli_query($conn, "SELECT * from item_type");
@@ -181,21 +182,19 @@ function queryAdd()
                             mysqli_free_result($query);
                             echo "
                         </select>
+                        <div class='invalid-feedback'>
+                            Please select an item type.
+                        </div>
                     </div>
-                    <div class='col-md-4 border '></div>
-                    <div class='col-md-4 border '>
-                        <button id='addMore' type='button' class='btn btn-secondary vertical-align-bottom'>Add More</button>
-                    </div>
-                    <div class='invalid-feedback'>
-                        Please select an item type.
+                    <div class='col-md-4 '></div>
+                    <div class='col-md-4  position-relative  '>
+                        <label for='addMore'>User:</label>
+                        <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add More</button>
                     </div>
                 </div>
-                
-           
                 <div class='text-center col-md-12'>
                     <button type='submit' class='btn btn-primary mt-2 mb-3'>Save</button>
                 </div>
-       
     </form>
     </div>";
 }
@@ -205,7 +204,7 @@ function itemQuery()
     global $conn;
     echo "
     <label for='item'>Item:</label>
-    <select class='form-control' id='item' name='item[]' required>
+    <select class='form-control  mb-2' id='item' name='item[]' required>
     <option value=''>Select</option>";
     $query = "SELECT * from items where item_type='$_POST[itemType]'";
     $exec = mysqli_query($conn, $query);
