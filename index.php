@@ -42,27 +42,15 @@ function ui()
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        
-        <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-        
 
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
-        
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-
-
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
         <script src="script.js"></script>
-
         <title>Mini Inventory</title>
     </head>
 
@@ -129,15 +117,16 @@ function ui()
                             </table>";
                                     ?>
                         </div>
-                        <div id="table-add"></div>
+                        <div class='p-4' id="table-add"></div>
                         <div id="table-edit"></div>
                         <div id="error"></div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
     </body>
+
     </html>
 <?php
 }
@@ -146,56 +135,54 @@ function queryAdd()
 {
     global $conn;
     echo "
-<div class='container ' id='InvRows'>
-    
-    <h2 class='text-center bg-info border col-md-12' >Add Request</h2>
-    <form id='add_form' class='needs-validation' novalidate>
-                <div class='row border '  > 
-                    <div class=' col-md-4  '>
-                        <label for='user'>User:</label>
-                        <select class='form-control mb-2' id='user' name='user' required>
-                            <option value=''>Select</option>";
-                            //show users
-                            $exec = mysqli_query($conn, $query = "SELECT * from users");
-                            $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-                            foreach ($row as $data) {
-                                echo "<option value='" . $data['user'] . "'>" . $data['user'] . "</option>";
-                            }
-                            echo "
-                        </select>
-                        <div class='invalid-feedback'>
-                            Please select a user
-                        </div>
+    <div class='container ' id='InvRows '>
+        <h2 class='text-center bg-info border col-md-12' >Add Request</h2>
+        <form id='add_form' class='needs-validation' novalidate>
+            <div class='row border '>
+                <div class=' col-md-4'>
+                    <label for='user'>User:</label>
+                    <select class='form-control mb-2' id='user' name='user' required>
+                        <option value=''>Select</option>";
+                        //show users
+                        $exec = mysqli_query($conn, $query = "SELECT * from users");
+                        $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+                        foreach ($row as $data) {
+                            echo "<option value='" . $data['user'] . "'>" . $data['user'] . "</option>";
+                        }
+                    echo "
+                    </select>
+                    <div class='invalid-feedback'>
+                        Please select a user
                     </div>
                 </div>
-                <div class='row border '  >
-                    <div class='col-md-4 '>
-                        <label for='itemType'>itemType:</label>
-                        <select class='form-control mb-2' id='itemType' name='itemType' required>
-                            <option value=''>Select Item</option>";
-                            //show items
-                            $query = mysqli_query($conn, "SELECT * from item_type");
-                            $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                            foreach ($row as $data) {
-                                echo "<option value='" . $data['id'] . "'>" . $data['type'] . "</option>";
-                            }
-                            mysqli_free_result($query);
-                            echo "
-                        </select>
-                        <div class='invalid-feedback'>
-                            Please select an item type.
-                        </div>
-                    </div>
-                    <div class='col-md-4 '></div>
-                    <div class='col-md-4  position-relative  '>
-                        <label for='addMore'>User:</label>
-                        <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add More</button>
+            </div>
+            <div class='row border' id='a'>
+                <div class='col-md-4 border'>
+                    <label for='itemType'>itemType:</label>
+                    <select class='form-control mb-2' id='itemType' name='itemType' required>
+                        <option value=''>Select Item</option>";
+                        //show items
+                        $query = mysqli_query($conn, "SELECT * from item_type");
+                        $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+                        foreach ($row as $data) {
+                            echo "<option value='" . $data['id'] . "'>" . $data['type'] . "</option>";
+                        }
+                        mysqli_free_result($query);
+                        echo "
+                    </select>
+                    <div class='invalid-feedback'>
+                        Please select an item type.
                     </div>
                 </div>
-                <div class='text-center col-md-12'>
-                    <button type='submit' class='btn btn-primary mt-2 mb-3'>Save</button>
+                <div class='col-md-4 border'></div>
+                <div class='col-md-4  border'>
+                    <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2 d-grid'>Add More</button>
                 </div>
-    </form>
+            </div>
+            <div class='text-center col-md-12'>
+                <button type='submit' class='btn btn-primary mt-2 mb-3'>Save</button>
+            </div>              
+        </form>
     </div>";
 }
 //////////
@@ -257,8 +244,7 @@ function queryEdit()
         }
         echo ">" . $data['id'] . '.-' . $data['user'] . "</option>";
     }
-    echo "
-                            </select>
+    echo "</select>
                         </td>
                     </tr>";
     foreach ($items as $dataItems) {
@@ -268,8 +254,8 @@ function queryEdit()
         $item_type = $row['item_type'];
         $item = $row['id'];
         echo "<tr>
-                            <td align='right'>
-                                Requested Items:
+                    <td align='right'>
+                            Requested Items:
                             </td>
                             <td>
                                 <select id='itemType' name='itemType' required >

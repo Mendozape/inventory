@@ -3,47 +3,50 @@ $(document).ready(function() {
 });
 
 $(document).on('click','#showData',function(e){
-  $.ajax({
-    type: "GET",
-    url: "index.php",
-    data: {
-      'opc': 2
-    },
-    dataType: "html",
-    success: function(data){
-      $('#table-edit').hide();
-      $('#message').hide();
-      $('#table-add').show();
-      $('#table-add').html(data);
-      $('#add_form').submit(function (e) {
-        e.preventDefault();
-        var form = $(this);
-        var formData = form.serialize();
-        var isValid = true;
-        // Check if form is valid
-        if (!form[0].checkValidity()) {
-          e.stopPropagation();
-          isValid = false;
-        }
-        form.addClass('was-validated');
-        if (isValid) {
-          // Perform AJAX request
-          $.ajax({
-            url: "index.php",
-            type: "POST",
-            data:$('#add_form').serialize() + '&opc=' + 3,
-            dataType: "html",
-            success: function(data){
-              $('#table-add').hide();
-              $('#message').show();
-              $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
-            }
-          });
-        }
-      });
-    }
+//$(document).ready(function() {
+  //$('#showData').click(function() {
+    $.ajax({
+      type: "GET",
+      url: "index.php",
+      data: {
+        'opc': 2
+      },
+      dataType: "html",
+      success: function(data){
+        $('#table-edit').hide();
+        $('#message').hide();
+        $('#table-add').show();
+        $('#table-add').html(data);
+        $('#add_form').submit(function (e) {
+          e.preventDefault();
+          var form = $(this);
+          var formData = form.serialize();
+          var isValid = true;
+          // Check if form is valid
+          if (!form[0].checkValidity()) {
+            e.stopPropagation();
+            isValid = false;
+          }
+          form.addClass('was-validated');
+          if (isValid) {
+            // Perform AJAX request
+            $.ajax({
+              url: "index.php",
+              type: "POST",
+              data:$('#add_form').serialize() + '&opc=' + 3,
+              dataType: "html",
+              success: function(data){
+                $('#table-add').hide();
+                $('#message').show();
+                $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
+              }
+            });
+          }
+        });
+      }
+    });
   });
-});
+//});
 
 ///////////////Edit request
 $(document).on('click','#editData',function(){
@@ -112,21 +115,37 @@ $(document).on('change', '#itemType', function(e) {
 
 //clone de tr
 $(document).on('click','#addMore',function(){
-  //let cuerpo=document.getElementById('cuerpo').childElementCount;
-  //let newRow=$(this).parents("div").clone().insertAfter($(this).parents("div"));
-  let newRow=$(this).parent().parent().clone().insertAfter($(this).parent());
-  //let table = document.getElementById('example2');
-  const totalDivCount = document.getElementById('InvRows').childNodes.length;
-  console.log(totalDivCount);
-  //let totalRowCount = table.rows.length;
-  newRow.prop('id', 'divParent'+totalDivCount );
-  //let a= document.getElementById('xx').getElementsByTagName('div').innerHTML='lato';
-  //let a= document.getElementById('divParent'+totalDivCount).children[1].children[1];
-  let a= document.getElementById('divParent'+totalDivCount).children[1];
-  //console.log(a);
-  a.setAttribute('id','div'+totalDivCount);
-  //a.setAttribute('class','row');
-});
+//$(document).ready(function() {
+  //$('#addMore').click(function() {
+    //alert('sdfdsf');
+    //let newRow=$(this).parent().parent().clone().insertAfter($(this).parent());
+    $('#a').prepend(`
+    <div class='row border' id='a'>
+                    <div class='col-md-4 border'>
+                        <label for='itemType'>itemType:</label>
+                        <select class='form-control mb-2' id='itemType' name='itemType' required>
+                            <option value=''>Select Item</option>";
+                            //show items
+                            $query = mysqli_query($conn, "SELECT * from item_type");
+                            $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+                            foreach ($row as $data) {
+                                echo "<option value='" . $data['id'] . "'>" . $data['type'] . "</option>";
+                            }
+                            mysqli_free_result($query);
+                            echo "
+                        </select>
+                        <div class='invalid-feedback'>
+                            Please select an item type.
+                        </div>
+                    </div>
+                    <div class='col-md-4 border position-relative'></div>
+                    <div class='col-md-4  border position-relative'>
+                        <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add More</button>
+                    </div>
+                </div>
+    `);
+  });
+//});
 
 $(document).on('click','#remove',function(){
   let removeRow=$(this).parents("tr").remove();
