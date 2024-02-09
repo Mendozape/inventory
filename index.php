@@ -109,14 +109,13 @@ function ui()
                                     </tr>";
                                     }
                                     mysqli_free_result($exec);
-                                    //mysqli_free_result($query);
                                     echo "
-                            </tbody>
+                                </tbody>
                             </table>";
-                                    ?>
+                        ?>
                         </div>
                         <div class='p-4' id="table-add"></div>
-                        <div id="table-edit"></div>
+                        <div class='p-4'id="table-edit"></div>
                         <div id="error"></div>
                     </div>
                 </div>
@@ -181,27 +180,6 @@ function queryAdd()
             </div>
         </form>
     </div>";
-}
-//////////
-function itemQuery()
-{
-    global $conn;
-    echo "
-    <label for='item'>Item:</label>
-    <select class='form-control  mb-2' id='item' name='item[]' required>
-    <option value=''>Select</option>";
-    $query = "SELECT * from items where item_type='$_POST[itemType]'";
-    $exec = mysqli_query($conn, $query);
-    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-    foreach ($row as $data) {
-        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
-    }
-    echo "</select>
-    <div class='invalid-feedback'>
-        Please select an item.
-    </div>
-    ";
-    mysqli_free_result($exec);
 }
 
 //interface for edit request
@@ -289,8 +267,8 @@ function queryEdit()
                     </div>
                 </div>
                 <div class='col-md-4'>
-                    <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2 d-grid'>Add more</button>
-                    <button id='remove' type='button' class='btn btn-danger position-absolute bottom-0 end-0  mb-2 d-grid'>Remove</button>
+                    <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add more</button>
+                    <button id='remove' type='button' class='btn btn-danger position-absolute bottom-0 end-0  mr-3 mb-2'>Remove</button>
                 </div>
             </div>";
             }echo "
@@ -300,7 +278,27 @@ function queryEdit()
         </form>
     </div>";
 }
-
+//////////On change ItemType Query 
+function itemQuery()
+{
+    global $conn;
+    echo "
+    <label for='item'>Item:</label>
+    <select class='form-control  mb-2' id='item' name='item[]' required>
+    <option value=''>Select</option>";
+    $query = "SELECT * from items where item_type='$_POST[itemType]'";
+    $exec = mysqli_query($conn, $query);
+    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+    foreach ($row as $data) {
+        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
+    }
+    echo "</select>
+    <div class='invalid-feedback'>
+        Please select an item.
+    </div>
+    ";
+    mysqli_free_result($exec);
+}
 //Save request
 function saveRequest()
 {
@@ -375,6 +373,7 @@ function saveRequest()
     }
     if ($result) echo 'Items updated succesfully';
 }
+
 //Edit request
 function editRequest()
 {

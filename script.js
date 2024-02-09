@@ -2,6 +2,15 @@ $(document).ready(function() {
   new DataTable('#example');
 });
 
+function allAreEqual(array) {
+  const result = array.every(element => {
+    if (element === array[0]) {
+      return true;
+    }
+  });
+  return result;
+}
+
 $(document).on('click','#showData',function(e){
     $.ajax({
       type: "GET",
@@ -26,6 +35,23 @@ $(document).on('click','#showData',function(e){
             isValid = false;
           }
           form.addClass('was-validated');
+          // Get the value of the first select element
+          //$("#incitipo").val();
+          let arr= $('#itemType').length;
+          console.log(arr);
+          //let aa=allAreEqual(arr);
+          let firstSelectValue = $('#itemType').last().val();
+          //let firstSelectValue=$('select.itemType:last').val();
+          // Check if all other select elements have the same value
+          let isValid2 = $('#itemType').filter(function() {
+              return $(this).val() !== firstSelectValue;
+          }).length === 0;
+          if (isValid2) {
+              alert('All select elements have the same value: ' + firstSelectValue + ':'+arr);
+          } else {
+              alert('Not all select elements have the same value.');
+          }
+
           if (isValid) {
             // Perform AJAX request
             $.ajax({
