@@ -35,7 +35,6 @@ function ui()
 ?>
     <!DOCTYPE html>
     <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,7 +52,6 @@ function ui()
         <script src="script.js"></script>
         <title>Mini Inventory</title>
     </head>
-
     <body class="bg-secondary">
         <div id="container" class="container">
             <div class="row my-4">
@@ -82,7 +80,7 @@ function ui()
                                         foreach ($row as $data) {
                                             $req_id = $data['req_id'];
                                             echo "
-                                    <tr >
+                                    <tr>
                                         <td>" . $data['requested_by'] . "</td>
                                         <td>";
                                             $itemsName = '';
@@ -126,7 +124,6 @@ function ui()
         </div>
 
     </body>
-
     </html>
 <?php
 }
@@ -135,7 +132,7 @@ function queryAdd()
 {
     global $conn;
     echo "
-    <div class='container ' id='InvRows '>
+    <div class='container'>
         <h2 class='text-center bg-info border col-md-12' >Add Request</h2>
         <form id='add_form' class='needs-validation' novalidate>
             <div class='row border '>
@@ -156,8 +153,8 @@ function queryAdd()
                     </div>
                 </div>
             </div>
-            <div class='row border' id='a'>
-                <div class='col-md-4 border'>
+            <div class='row border'>
+                <div class='col-md-4'>
                     <label for='itemType'>itemType:</label>
                     <select class='form-control mb-2' id='itemType' name='itemType' required>
                         <option value=''>Select Item</option>";
@@ -174,14 +171,14 @@ function queryAdd()
                         Please select an item type.
                     </div>
                 </div>
-                <div class='col-md-4 border'></div>
-                <div class='col-md-4  border'>
+                <div class='col-md-4'></div>
+                <div class='col-md-4'>
                     <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2 d-grid'>Add More</button>
                 </div>
             </div>
             <div class='text-center col-md-12'>
                 <button type='submit' class='btn btn-primary mt-2 mb-3'>Save</button>
-            </div>              
+            </div>
         </form>
     </div>";
 }
@@ -219,93 +216,91 @@ function queryEdit()
     $items = explode(",", $row['items']);
     mysqli_free_result($result);
     echo "
-    <form action='' method='POST' id='edit_form'  >
-        <table id='example2'   border='1' style='width:100%' class='table table-success table-striped'>
-                <thead class='thead-dark'>
-                    <tr>
-                        <td colspan='3' align='center' class='bg-secondary'><h3>Edit Request</h3>
-                        <input name='req_id' type='text' hidden value='$_GET[req_id]'>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td align='right'>User:</td>
-                        <td colspan='3'>
-                            <select id='user' name='user' required>
-                                <option value=''>Select</option>";
-    //show users and select when is equal to db
-    $query = mysqli_query($conn, "SELECT * from users");
-    $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
-    foreach ($row as $data) {
-        echo "<option value='" . $data['user'] . "'";
-        if ($data['user'] == $requested_by) {
-            echo "selected";
-        }
-        echo ">" . $data['id'] . '.-' . $data['user'] . "</option>";
-    }
-    echo "</select>
-                        </td>
-                    </tr>";
-    foreach ($items as $dataItems) {
-        $query = "SELECT * from items where id='$dataItems' ";
-        $result = $conn->query($query);
-        $row = $result->fetch_array(MYSQLI_ASSOC);
-        $item_type = $row['item_type'];
-        $item = $row['id'];
-        echo "<tr>
-                    <td align='right'>
-                            Requested Items:
-                            </td>
-                            <td>
-                                <select id='itemType' name='itemType' required >
-                                    <option value=''>Select</option>";
-        //show items
-        $query2 = mysqli_query($conn, "SELECT * from item_type");
-        $row2 = mysqli_fetch_all($query2, MYSQLI_ASSOC);
-        foreach ($row2 as $data) {
-            echo "<option value='" . $data['id'] . "'";
-            if ($data['id'] == $item_type) {
-                print "selected";
-            }
-            echo ">" . $data['type'] . "</option>";
-        }
-        echo "
-                                </select>
-                                <div>
-                                    <select name='item[]' id='item[]' required>
-                                    <option value=''>Select--$dataItems</option>";
-        $query3 = "SELECT * from items where item_type='$item_type'";
-        $result3 = mysqli_query($conn, $query3);
-        $row3 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
-        foreach ($row3 as $data) {
-            echo "<option value='" . $data['id'] . "'";
-            if ($data['id'] == $dataItems) {
-                print "selected";
-            }
-            echo ">" . $data['item'] . "</option>";
-        }
-        echo "</select>
-                                </div>
-                            </td>
-                            <td align='left'>
-                                <button id='addMore' type='button' class='btn btn-secondary'>Add more</button>
-                                <button id='remove' type='button' class='btn btn-danger'>Remove</button>
-                            </td>
-                        </tr>";
-    }
-    echo "
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan='3' class='text-center'>
-                            <input type='submit'  value='Save' class='btn btn-primary w-25'  id='save'>
-                        </td>
-                    </tr>
-                </tfoot>
-        </table>
-    </form>";
+    <div class='container'>
+        <h2 class='text-center bg-info border col-md-12' >Add Request</h2>
+        <form id='edit_form' class='needs-validation' novalidate>
+            <div class='row border '>
+                <div class=' col-md-4'>
+                    <input name='req_id' type='text' hidden value='$_GET[req_id]'>
+                    <label for='user'>User:</label>
+                    <select class='form-control mb-2' id='user' name='user' required>
+                        <option value=''>Select</option>";
+                        //show users and select when is equal to db
+                        $query = mysqli_query($conn, "SELECT * from users");
+                        $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+                        foreach ($row as $data) {
+                            echo "<option value='" . $data['user'] . "'";
+                            if ($data['user'] == $requested_by) {
+                                echo "selected";
+                            }
+                            echo ">" . $data['id'] . '.-' . $data['user'] . "</option>";
+                        }
+                    echo "
+                    </select>
+                    <div class='invalid-feedback'>
+                        Please select a user
+                    </div>
+                </div>
+            </div>";
+            foreach ($items as $dataItems) {
+            $query = "SELECT * from items where id='$dataItems' ";
+            $result = $conn->query($query);
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+            $item_type = $row['item_type'];
+            $item = $row['id'];echo"
+            <div class='row border '>
+                <div class='col-md-4'>
+                    <label for='itemType'>Requested Items Type:</label>
+                    <select class='form-control mb-2' id='itemType' name='itemType' required >
+                        <option value=''>Select</option>";
+                            //show items
+                            $query2 = mysqli_query($conn, "SELECT * from item_type");
+                            $row2 = mysqli_fetch_all($query2, MYSQLI_ASSOC);
+                            foreach ($row2 as $data) {
+                                echo "<option value='" . $data['id'] . "'";
+                                if ($data['id'] == $item_type) {
+                                    print "selected";
+                                }
+                                echo ">" . $data['type'] . "</option>";
+                            }
+                            echo "
+                    </select>
+                    <div class='invalid-feedback'>
+                        Please select an item type.
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    <label for='item'>Requested Items:</label>
+                    <select class='form-control mb-2' name='item[]' id='item[]' required>
+                        <option value=''>Select--$dataItems</option>";
+                            $query3 = "SELECT * from items where item_type='$item_type'";
+                            $result3 = mysqli_query($conn, $query3);
+                            $row3 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
+                            foreach ($row3 as $data) {
+                                echo "<option value='" . $data['id'] . "'";
+                                if ($data['id'] == $dataItems) {
+                                    print "selected";
+                                }
+                                echo ">" . $data['item'] . "</option>";
+                            }echo "
+                    </select>
+                    <div class='invalid-feedback'>
+                        Please select an item type.
+                    </div>
+                </div>
+                <div class='col-md-4'>
+                    <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2 d-grid'>Add more</button>
+                    <button id='remove' type='button' class='btn btn-danger position-absolute bottom-0 end-0  mb-2 d-grid'>Remove</button>
+                </div>
+            </div>";
+            }echo "
+            <div class='text-center col-md-12'>
+                <button type='submit' class='btn btn-primary mt-2 mb-3'>Save</button>
+            </div>
+        </form>
+    </div>";
 }
+
 //Save request
 function saveRequest()
 {

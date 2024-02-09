@@ -3,8 +3,6 @@ $(document).ready(function() {
 });
 
 $(document).on('click','#showData',function(e){
-//$(document).ready(function() {
-  //$('#showData').click(function() {
     $.ajax({
       type: "GET",
       url: "index.php",
@@ -46,7 +44,7 @@ $(document).on('click','#showData',function(e){
       }
     });
   });
-//});
+
 
 ///////////////Edit request
 $(document).on('click','#editData',function(){
@@ -64,8 +62,19 @@ $(document).on('click','#editData',function(){
       $('#message').hide();
       $('#table-edit').show();
       $('#table-edit').html(data);
-      $("#edit_form").validate({
-        submitHandler: function() {
+      $('#edit_form').submit(function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var formData = form.serialize();
+        var isValid = true;
+        // Check if form is valid
+        if (!form[0].checkValidity()) {
+          e.stopPropagation();
+          isValid = false;
+        }
+        form.addClass('was-validated');
+        if (isValid) {
+          // Perform AJAX request
           $.ajax({
             url: "index.php",
             type: "POST",
@@ -112,43 +121,13 @@ $(document).on('change', '#itemType', function(e) {
   });
 });
 
-
-//clone de tr
+//clone de div
 $(document).on('click','#addMore',function(){
-//$(document).ready(function() {
-  //$('#addMore').click(function() {
-    //alert('sdfdsf');
-    //let newRow=$(this).parent().parent().clone().insertAfter($(this).parent());
-    $('#a').prepend(`
-    <div class='row border' id='a'>
-                    <div class='col-md-4 border'>
-                        <label for='itemType'>itemType:</label>
-                        <select class='form-control mb-2' id='itemType' name='itemType' required>
-                            <option value=''>Select Item</option>";
-                            //show items
-                            $query = mysqli_query($conn, "SELECT * from item_type");
-                            $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                            foreach ($row as $data) {
-                                echo "<option value='" . $data['id'] . "'>" . $data['type'] . "</option>";
-                            }
-                            mysqli_free_result($query);
-                            echo "
-                        </select>
-                        <div class='invalid-feedback'>
-                            Please select an item type.
-                        </div>
-                    </div>
-                    <div class='col-md-4 border position-relative'></div>
-                    <div class='col-md-4  border position-relative'>
-                        <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add More</button>
-                    </div>
-                </div>
-    `);
-  });
-//});
+    let newRow=$(this).parent().parent().clone().insertAfter($(this).parent().parent());
+});
 
 $(document).on('click','#remove',function(){
-  let removeRow=$(this).parents("tr").remove();
+  let removeRow=$(this).parent().parent().remove();
   });
 
 
