@@ -29,42 +29,41 @@ $(document).on('click','#showData',function(e){
           var form = $(this);
           var formData = form.serialize();
           var isValid = true;
+          var isValid2 = true;
           // Check if form is valid
           if (!form[0].checkValidity()) {
             e.stopPropagation();
             isValid = false;
           }
           form.addClass('was-validated');
-          // Get the value of the first select element
-          //$("#incitipo").val();
-          let arr= $('#itemType').length;
-          console.log(arr);
-          //let aa=allAreEqual(arr);
-          let firstSelectValue = $('#itemType').last().val();
-          //let firstSelectValue=$('select.itemType:last').val();
-          // Check if all other select elements have the same value
-          let isValid2 = $('#itemType').filter(function() {
-              return $(this).val() !== firstSelectValue;
-          }).length === 0;
-          if (isValid2) {
-              alert('All select elements have the same value: ' + firstSelectValue + ':'+arr);
-          } else {
-              alert('Not all select elements have the same value.');
+          var selectElements = document.getElementsByName("itemType");
+          var firstItemType = selectElements[0].value;
+          for (var i = 1; i < selectElements.length; i++) {
+              if (selectElements[i].value !== firstItemType) {
+                isValid2 = false;
+              }
           }
-
           if (isValid) {
             // Perform AJAX request
-            $.ajax({
-              url: "index.php",
-              type: "POST",
-              data:$('#add_form').serialize() + '&opc=' + 3,
-              dataType: "html",
-              success: function(data){
-                $('#table-add').hide();
-                $('#message').show();
-                $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
-              }
-            });
+            if (isValid2) {
+              $.ajax({
+                url: "index.php",
+                type: "POST",
+                data:$('#add_form').serialize() + '&opc=' + 3,
+                dataType: "html",
+                success: function(data){
+                  //let array1= $('#item');
+                  //array1.forEach((element) => console.log(element));
+                  //console.log($('#item'));
+                  $('#error').hide();
+                  $('#table-add').hide();
+                  $('#message').show();
+                  $('#message').html(`<div class=" alert alert-success text-center" role="alert">${data}</div>`);
+                }
+              });
+            }else{
+              $('#error').html(`<div class="bg-danger text-white text-center" role="alert">The Item Type must be the same in all rows, if you want different you have to make separete requests.</div>`);
+            }
           }
         });
       }
@@ -93,37 +92,50 @@ $(document).on('click','#editData',function(){
         var form = $(this);
         var formData = form.serialize();
         var isValid = true;
+        var isValid2 = true;
         // Check if form is valid
         if (!form[0].checkValidity()) {
           e.stopPropagation();
           isValid = false;
         }
         form.addClass('was-validated');
+        var selectElements = document.getElementsByName("itemType");
+        var firstItemType = selectElements[0].value;
+        for (var i = 1; i < selectElements.length; i++) {
+          if (selectElements[i].value !== firstItemType) {
+            isValid2 = false;
+          }
+        }
         if (isValid) {
           // Perform AJAX request
-          $.ajax({
-            url: "index.php",
-            type: "POST",
-            data:$('#edit_form').serialize() + '&opc=' + 5,
-            dataType: "html",
-            success: function(data){
-              $('#table-edit').hide();
-              $('#message').show();
-              $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
-              /*$.ajax({
-                type: "GET",
-                url: "index.php",
-                data: {
-                  'opc': 1
-                },
-                dataType: "html",
-                success: function(data){
-                  $('#container').show();
-                  $('#container').html(data);
-                }
-              });*/
-            }
-          });
+          if (isValid2) {
+            $.ajax({
+              url: "index.php",
+              type: "POST",
+              data:$('#edit_form').serialize() + '&opc=' + 5,
+              dataType: "html",
+              success: function(data){
+                $('#error').hide();
+                $('#table-edit').hide();
+                $('#message').show();
+                $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
+                /*$.ajax({
+                  type: "GET",
+                  url: "index.php",
+                  data: {
+                    'opc': 1
+                  },
+                  dataType: "html",
+                  success: function(data){
+                    $('#container').show();
+                    $('#container').html(data);
+                  }
+                });*/
+              }
+            });
+          }else{
+            $('#error').html(`<div class="bg-danger text-white text-center" role="alert">The Item Type must be the same in all rows, if you want different you have to make separete requests.</div>`);
+          }
         }
       });
     }

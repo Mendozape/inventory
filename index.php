@@ -54,7 +54,7 @@ function ui()
     </head>
     <body class="bg-secondary">
         <div id="container" class="container">
-            <div class="row my-4">
+            <div class="row ">
                 <div class="col-lg-10 mx-auto">
                     <div class="card shadow">
                         <div class="card-header">
@@ -114,9 +114,9 @@ function ui()
                             </table>";
                         ?>
                         </div>
+                        <div id='error'></div>
                         <div class='p-4' id="table-add"></div>
                         <div class='p-4'id="table-edit"></div>
-                        <div id="error"></div>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@ function queryAdd()
     echo "
     <div class='container'>
         <h2 class='text-center bg-info border col-md-12' >Add Request</h2>
-        <form id='add_form' class='needs-validation' novalidate>
+        <form id='add_form'  class='needs-validation' novalidate>
             <div class='row border '>
                 <div class=' col-md-4'>
                     <label for='user'>User:</label>
@@ -155,7 +155,7 @@ function queryAdd()
             <div class='row border'>
                 <div class='col-md-4'>
                     <label for='itemType'>itemType:</label>
-                    <select class='form-control mb-2' id='itemType' name='itemType' required>
+                    <select class='form-control mb-2' id='itemType' name='itemType'  required>
                         <option value=''>Select Item</option>";
                         //show items
                         $query = mysqli_query($conn, "SELECT * from item_type");
@@ -180,6 +180,27 @@ function queryAdd()
             </div>
         </form>
     </div>";
+}
+//////////On change ItemType Query 
+function itemQuery()
+{
+    global $conn;
+    echo "
+    <label for='item'>Item:</label>
+    <select class='form-control  mb-2' id='item' name='item[]' required>
+    <option value=''>Select</option>";
+    $query = "SELECT * from items where item_type='$_POST[itemType]'";
+    $exec = mysqli_query($conn, $query);
+    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+    foreach ($row as $data) {
+        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
+    }
+    echo "</select>
+    <div class='invalid-feedback'>
+        Please select an item.
+    </div>
+    ";
+    mysqli_free_result($exec);
 }
 
 //interface for edit request
@@ -249,7 +270,7 @@ function queryEdit()
                 </div>
                 <div class='col-md-4'>
                     <label for='item'>Requested Items:</label>
-                    <select class='form-control mb-2' name='item[]' id='item[]' required>
+                    <select class='form-control mb-2' id='item' name='item[]'  required>
                         <option value=''>Select--$dataItems</option>";
                             $query3 = "SELECT * from items where item_type='$item_type'";
                             $result3 = mysqli_query($conn, $query3);
@@ -278,27 +299,7 @@ function queryEdit()
         </form>
     </div>";
 }
-//////////On change ItemType Query 
-function itemQuery()
-{
-    global $conn;
-    echo "
-    <label for='item'>Item:</label>
-    <select class='form-control  mb-2' id='item' name='item[]' required>
-    <option value=''>Select</option>";
-    $query = "SELECT * from items where item_type='$_POST[itemType]'";
-    $exec = mysqli_query($conn, $query);
-    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-    foreach ($row as $data) {
-        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
-    }
-    echo "</select>
-    <div class='invalid-feedback'>
-        Please select an item.
-    </div>
-    ";
-    mysqli_free_result($exec);
-}
+
 //Save request
 function saveRequest()
 {
