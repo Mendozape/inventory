@@ -307,16 +307,17 @@ function saveRequest()
     $today = date("Y-m-d");
     //Convert array to string
     $items = implode(',', $_POST['item']);
-    $result = mysqli_query($conn, "INSERT INTO requests (requested_by, requested_on, items)   VALUES ('$_POST[user]','$today','$items')");
+    $result = mysqli_query($conn, "INSERT INTO requests (requested_by, requested_on, items)   VALUES   ('$_POST[user]','$today','$items')");
     ///////////////////////////////////////check if exist user exist in db////////////////////////////////////////////////
-    $query = "SELECT * from summary  where requested_by='$_POST[user]'";
-    $result = $conn->query($query);
-    $row2 = $result->fetch_array(MYSQLI_ASSOC);
+    $query2 = "SELECT * from summary  where requested_by='$_POST[user]'";
+    $result2 = $conn->query($query2);
+    $row2 = $result2->fetch_array(MYSQLI_ASSOC);
     //if user exist in db decode the items JSON field
     if (isset($row2['items'])) {
-        $items2 = $row2['items'];
-        $jsonDecode = json_decode($items2, true);
+        $items3 = $row2['items'];
+        $jsonDecode = json_decode($items3, true);
     }
+
     //four arrays declaration because there are three type of items plus one multidimentional array to store all three arrays and then create a JSON objet
     $array1 = array();
     $array2 = array();
@@ -329,10 +330,10 @@ function saveRequest()
         $array3 = $jsonDecode[2];
         //iterate the item array
         foreach ($_POST['item'] as $item) {
-            $query = "SELECT * from items where id='$item'";
-            $result = $conn->query($query);
-            $row = $result->fetch_array(MYSQLI_ASSOC);
-            $item_type = $row['item_type'];
+            $query4 = "SELECT * from items where id='$item'";
+            $result4 = $conn->query($query4);
+            $row4 = $result4->fetch_array(MYSQLI_ASSOC);
+            $item_type = $row4['item_type'];
             //add the item in each array that correspond
             if ($item_type == 1) {
                 array_push($array1, $item);
@@ -349,13 +350,13 @@ function saveRequest()
         array_push($arrays, $array2);
         array_push($arrays, $array3);
         $json = json_encode($arrays, JSON_FORCE_OBJECT);
-        $result = mysqli_query($conn, "UPDATE summary SET items='$json' WHERE requested_by='$_POST[user]'");
+        $result5 = mysqli_query($conn, "UPDATE summary SET items='$json' WHERE requested_by='$_POST[user]'");
     } else {
         foreach ($_POST['item'] as $item) {
-            $query = "SELECT * from items where id='$item'";
-            $result = $conn->query($query);
-            $row = $result->fetch_array(MYSQLI_ASSOC);
-            $item_type = $row['item_type'];
+            $query4 = "SELECT * from items where id='$item'";
+            $result4 = $conn->query($query4);
+            $row4 = $result4->fetch_array(MYSQLI_ASSOC);
+            $item_type = $row4['item_type'];
             if ($item_type == 1) {
                 array_push($array1, $item);
             }
@@ -370,9 +371,9 @@ function saveRequest()
         array_push($arrays, $array2);
         array_push($arrays, $array3);
         $json = json_encode($arrays, JSON_FORCE_OBJECT);
-        $result = mysqli_query($conn, "INSERT INTO summary (requested_by,items)   VALUES ('$_POST[user]','$json')");
+        $result5 = mysqli_query($conn, "INSERT INTO summary (requested_by,items)   VALUES ('$_POST[user]','$json')");
     }
-    if ($result) echo 'Items updated succesfully';
+    if ($result5) echo 'Items updated succesfully';
 }
 
 //Edit request
@@ -380,31 +381,33 @@ function editRequest()
 {
     global $conn;
     /////////////////////////////////////////////////////UPDATE requests///////////////////////////////////
+    $query = "SELECT * from requests  where req_id='$_POST[req_id]'";
+    $result = $conn->query($query);
+    $row = $result->fetch_array(MYSQLI_ASSOC);
+    $UserBeforeUpdate=$row['requested_by'];
+    echo $UserBeforeUpdate.':'.$_POST['user'];
     $today = date("Y-m-d");
     //Convert array to string
     $items = implode(',', $_POST['item']);
     $query = mysqli_query($conn, "UPDATE requests SET items='$items',requested_by='$_POST[user]',requested_on='$today' WHERE req_id='$_POST[req_id]'");
     //show succesfully message in the UI
     if ($query) echo 'Items updated succesfully';
+    
     ////////////////////////////////////////////////////UPDATE summary/////////////////////////////////////
-    ///////////////////////////////////////check if exist user exist in db////////////////////////////////////////////////
-    $query = "SELECT * from summary  where requested_by='$_POST[user]'";
-    $result = $conn->query($query);
-    $row2 = $result->fetch_array(MYSQLI_ASSOC);
-    //if user exist in db decode the items JSON field
-    $items2 = $row2['items'];
-    $jsonDecode = json_decode($items2, true);
+    $items=array();
+    $query3 = "SELECT * from requests  where requested_by='$_POST[user]'";
+    $result3 = $conn->query($query3);
+    while ($row3 = $result3->fetch_array(MYSQLI_ASSOC)) {
+        $items=array_merge($items, explode(',', $row3['items']));
+    }
+    //$itemsall=array_merge($items, $_POST['item']);
     //four arrays declaration because there are three type of items plus one multidimentional array to store all three arrays and then create a JSON objet
     $array1 = array();
     $array2 = array();
     $array3 = array();
     $arrays = array();
-    //split the JSON objet in three arrays
-    $array1 = $jsonDecode[0];
-    $array2 = $jsonDecode[1];
-    $array3 = $jsonDecode[2];
     //iterate the item array
-    foreach ($_POST['item'] as $item) {
+    foreach ($items as $item) {
         $query = "SELECT * from items where id='$item'";
         $result = $conn->query($query);
         $row = $result->fetch_array(MYSQLI_ASSOC);
@@ -425,6 +428,53 @@ function editRequest()
     array_push($arrays, $array2);
     array_push($arrays, $array3);
     $json = json_encode($arrays, JSON_FORCE_OBJECT);
-    $result = mysqli_query($conn, "UPDATE summary SET items='$json' WHERE requested_by='$_POST[user]'");
+    
+    $query = "SELECT * from summary where requested_by='$_POST[user]'";
+    $result = $conn->query($query);
+    $row = $result->fetch_array(MYSQLI_ASSOC);
+    if(isset($row['requested_by'])){
+        $result = mysqli_query($conn, "UPDATE summary SET items='$json' WHERE requested_by='$_POST[user]'");
+    }else{
+        $result5 = mysqli_query($conn, "INSERT INTO summary (requested_by,items)   VALUES ('$_POST[user]','$json')");
+    }
+
+    ////////////////////////////////////////////
+    if($UserBeforeUpdate!=$_POST['user']){
+        $items=array();
+        $query3 = "SELECT * from requests  where requested_by='$UserBeforeUpdate'";
+        $result3 = $conn->query($query3);
+        while ($row3 = $result3->fetch_array(MYSQLI_ASSOC)) {
+            $items=array_merge($items, explode(',', $row3['items']));
+        }
+        //$itemsall=array_merge($items, $_POST['item']);
+        //four arrays declaration because there are three type of items plus one multidimentional array to store all three arrays and then create a JSON objet
+        $array1 = array();
+        $array2 = array();
+        $array3 = array();
+        $arrays = array();
+        //iterate the item array
+        foreach ($items as $item) {
+            $query = "SELECT * from items where id='$item'";
+            $result = $conn->query($query);
+            $row = $result->fetch_array(MYSQLI_ASSOC);
+            $item_type = $row['item_type'];
+            //add the item in each array that correspond
+            if ($item_type == 1) {
+                array_push($array1, $item);
+            }
+            if ($item_type == 2) {
+                array_push($array2, $item);
+            }
+            if ($item_type == 3) {
+                array_push($array3, $item);
+            }
+        }
+        //create the JSON objet and then the UPDATE
+        array_push($arrays, $array1);
+        array_push($arrays, $array2);
+        array_push($arrays, $array3);
+        $json = json_encode($arrays, JSON_FORCE_OBJECT);
+        $result = mysqli_query($conn, "UPDATE summary SET items='$json' WHERE requested_by='$UserBeforeUpdate'");
+    }
 }
 ?>
