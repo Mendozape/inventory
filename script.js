@@ -2,15 +2,6 @@ $(document).ready(function() {
   new DataTable('#example');
 });
 
-function allAreEqual(array) {
-  const result = array.every(element => {
-    if (element === array[0]) {
-      return true;
-    }
-  });
-  return result;
-}
-
 $(document).on('click','#showData',function(e){
     $.ajax({
       type: "GET",
@@ -52,13 +43,21 @@ $(document).on('click','#showData',function(e){
                 data:$('#add_form').serialize() + '&opc=' + 3,
                 dataType: "html",
                 success: function(data){
-                  //let array1= $('#item');
-                  //array1.forEach((element) => console.log(element));
-                  //console.log($('#item'));
                   $('#error').hide();
                   $('#table-add').hide();
                   $('#message').show();
                   $('#message').html(`<div class=" alert alert-success text-center" role="alert">${data}</div>`);
+                  $.ajax({
+                    type: "GET",
+                    url: "index.php",
+                    data: {
+                      'opc': 1
+                    },
+                    dataType: "html",
+                    success: function(data){
+                      $('#container').html(data);
+                    }
+                  });
                 }
               });
             }else{
@@ -99,42 +98,45 @@ $(document).on('click','#editData',function(){
           isValid = false;
         }
         form.addClass('was-validated');
-        var selectElements = document.getElementsByName("itemType");
-        var firstItemType = selectElements[0].value;
-        for (var i = 1; i < selectElements.length; i++) {
-          if (selectElements[i].value !== firstItemType) {
-            isValid2 = false;
+        let selectElements = document.getElementsByName("itemTypeEdit");
+        if(selectElements.length==0){
+          $('#error').html(`<div class="bg-danger text-white text-center" role="alert">Must be at least one request.</div>`);
+        }else{
+          var firstItemType = selectElements[0].value;
+          for (var i = 1; i < selectElements.length; i++) {
+            if (selectElements[i].value !== firstItemType) {
+              isValid2 = false;
+            }
           }
-        }
-        if (isValid) {
-          // Perform AJAX request
-          if (isValid2) {
-            $.ajax({
-              url: "index.php",
-              type: "POST",
-              data:$('#edit_form').serialize() + '&opc=' + 5,
-              dataType: "html",
-              success: function(data){
-                $('#error').hide();
-                $('#table-edit').hide();
-                $('#message').show();
-                $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
-                /*$.ajax({
-                  type: "GET",
-                  url: "index.php",
-                  data: {
-                    'opc': 1
-                  },
-                  dataType: "html",
-                  success: function(data){
-                    $('#container').show();
-                    $('#container').html(data);
-                  }
-                });*/
-              }
-            });
-          }else{
-            $('#error').html(`<div class="bg-danger text-white text-center" role="alert">The Item Type must be the same in all rows, if you want different you have to make separete requests.</div>`);
+          if (isValid) {//if all is correct then proceed to check if all selects are equal, in other case show validation errors with bootstrap
+            // Perform AJAX request
+            if (isValid2) {//if all iteType selects are equal then proceed to sent the form
+              $.ajax({
+                url: "index.php",
+                type: "POST",
+                data:$('#edit_form').serialize() + '&opc=' + 5,
+                dataType: "html",
+                success: function(data){
+                  $('#error').hide();
+                  $('#table-edit').hide();
+                  $('#message').show();
+                  $('#message').html(`<div class="alert alert-success text-center" role="alert">${data}</div>`);
+                  $.ajax({
+                    type: "GET",
+                    url: "index.php",
+                    data: {
+                      'opc': 1
+                    },
+                    dataType: "html",
+                    success: function(data){
+                      $('#container').html(data);
+                    }
+                  });
+                }
+              });
+            }else{
+              $('#error').html(`<div class="bg-danger text-white text-center" role="alert">The Item Type must be the same in all rows, if you want different you have to make separete requests.</div>`);
+            }
           }
         }
       });
@@ -144,6 +146,22 @@ $(document).on('click','#editData',function(){
 
 //get data on change Item Type
 $(document).on('change', '#itemType', function(e) {
+  $.ajax({
+    type: "POST",
+    url: "index.php",
+    data: {
+    'opc': 6,
+    'itemType': $(this).val()
+    },
+    dataType: "html",
+    success: function(data){
+      //get div next to the itemType
+      $(e.currentTarget.parentElement.nextElementSibling).html(data);
+    }
+  });
+});
+//get data on change Item Type
+$(document).on('change', '#itemTypeEdit', function(e) {
   $.ajax({
     type: "POST",
     url: "index.php",

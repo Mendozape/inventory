@@ -7,26 +7,14 @@ if (!$conn) {
 }
 //stwich opcion
 if (isset($_GET['opc'])) {
-    if ($_GET['opc'] == "1") {
-        ui();
-    }
-    if ($_GET['opc'] == "2") {
-        queryAdd();
-    }
-    if ($_GET['opc'] == "4") {
-        queryEdit();
-    }
+    if ($_GET['opc'] == "1") ui();
+    if ($_GET['opc'] == "2") queryAdd();
+    if ($_GET['opc'] == "4") queryEdit();
 }
 if (isset($_POST['opc'])) {
-    if ($_POST['opc'] == "3") {
-        saveRequest();
-    }
-    if ($_POST['opc'] == "5") {
-        editRequest();
-    }
-    if ($_POST['opc'] == "6") {
-        itemQuery();
-    }
+    if ($_POST['opc'] == "3") saveRequest();
+    if ($_POST['opc'] == "5") editRequest();
+    if ($_POST['opc'] == "6") itemQuery();
 }
 // Principal User Interface
 function ui()
@@ -91,7 +79,6 @@ function ui()
                                                 $query = "SELECT items.item,items.id,items.item_type, item_type.id,item_type.type from items INNER JOIN item_type ON items.item_type=item_type.id where items.id='$value'";
                                                 $result = $conn->query($query);
                                                 $row2 = $result->fetch_array(MYSQLI_ASSOC);
-
                                                 $itemsName .= $row2['item'] . ',';
                                                 $itemsType = $row2['type'];
                                             }
@@ -142,9 +129,7 @@ function queryAdd()
                         //show users
                         $exec = mysqli_query($conn, $query = "SELECT * from users");
                         $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-                        foreach ($row as $data) {
-                            echo "<option value='" . $data['user'] . "'>" . $data['user'] . "</option>";
-                        }
+                        foreach ($row as $data) echo "<option value='" . $data['user'] . "'>" . $data['user'] . "</option>";
                     echo "
                     </select>
                     <div class='invalid-feedback'>
@@ -160,9 +145,7 @@ function queryAdd()
                         //show items
                         $query = mysqli_query($conn, "SELECT * from item_type");
                         $row = mysqli_fetch_all($query, MYSQLI_ASSOC);
-                        foreach ($row as $data) {
-                            echo "<option value='" . $data['id'] . "'>" . $data['type'] . "</option>";
-                        }
+                        foreach ($row as $data) echo "<option value='" . $data['id'] . "'>" . $data['type'] . "</option>";
                         mysqli_free_result($query);
                         echo "
                     </select>
@@ -189,13 +172,12 @@ function itemQuery()
     <label for='item'>Item:</label>
     <select class='form-control  mb-2' id='item' name='item[]' required>
     <option value=''>Select</option>";
-    $query = "SELECT * from items where item_type='$_POST[itemType]'";
-    $exec = mysqli_query($conn, $query);
-    $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
-    foreach ($row as $data) {
-        echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
-    }
-    echo "</select>
+        $query = "SELECT * from items where item_type='$_POST[itemType]'";
+        $exec = mysqli_query($conn, $query);
+        $row = mysqli_fetch_all($exec, MYSQLI_ASSOC);
+        foreach ($row as $data) echo "<option value=" . $data['id'] . ">" . $data['item'] . "</option>";
+        echo "
+    </select>
     <div class='invalid-feedback'>
         Please select an item.
     </div>
@@ -242,56 +224,56 @@ function queryEdit()
                 </div>
             </div>";
             foreach ($items as $dataItems) {
-            $query = "SELECT * from items where id='$dataItems' ";
-            $result = $conn->query($query);
-            $row = $result->fetch_array(MYSQLI_ASSOC);
-            $item_type = $row['item_type'];
-            $item = $row['id'];echo"
-            <div class='row border '>
-                <div class='col-md-4'>
-                    <label for='itemType'>Requested Items Type:</label>
-                    <select class='form-control mb-2' id='itemType' name='itemType' required >
-                        <option value=''>Select</option>";
-                            //show items
-                            $query2 = mysqli_query($conn, "SELECT * from item_type");
-                            $row2 = mysqli_fetch_all($query2, MYSQLI_ASSOC);
-                            foreach ($row2 as $data) {
-                                echo "<option value='" . $data['id'] . "'";
-                                if ($data['id'] == $item_type) {
-                                    print "selected";
+                $query = "SELECT * from items where id='$dataItems' ";
+                $result = $conn->query($query);
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $item_type = $row['item_type'];
+                $item = $row['id'];echo"
+                <div class='row border '>
+                    <div class='col-md-4'>
+                        <label for='itemType'>Requested Items Type:</label>
+                        <select class='form-control mb-2' id='itemTypeEdit' name='itemTypeEdit' required >
+                            <option value=''>Select</option>";
+                                //show items
+                                $query2 = mysqli_query($conn, "SELECT * from item_type");
+                                $row2 = mysqli_fetch_all($query2, MYSQLI_ASSOC);
+                                foreach ($row2 as $data) {
+                                    echo "<option value='" . $data['id'] . "'";
+                                    if ($data['id'] == $item_type) {
+                                        print "selected";
+                                    }
+                                    echo ">" . $data['type'] . "</option>";
                                 }
-                                echo ">" . $data['type'] . "</option>";
-                            }
-                            echo "
-                    </select>
-                    <div class='invalid-feedback'>
-                        Please select an item type.
+                                echo "
+                        </select>
+                        <div class='invalid-feedback'>
+                            Please select an item type.
+                        </div>
                     </div>
-                </div>
-                <div class='col-md-4'>
-                    <label for='item'>Requested Items:</label>
-                    <select class='form-control mb-2' id='item' name='item[]'  required>
-                        <option value=''>Select--$dataItems</option>";
-                            $query3 = "SELECT * from items where item_type='$item_type'";
-                            $result3 = mysqli_query($conn, $query3);
-                            $row3 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
-                            foreach ($row3 as $data) {
-                                echo "<option value='" . $data['id'] . "'";
-                                if ($data['id'] == $dataItems) {
-                                    print "selected";
-                                }
-                                echo ">" . $data['item'] . "</option>";
-                            }echo "
-                    </select>
-                    <div class='invalid-feedback'>
-                        Please select an item type.
+                    <div class='col-md-4'>
+                        <label for='item'>Requested Items:</label>
+                        <select class='form-control mb-2' id='item' name='item[]'  required>
+                            <option value=''>Select</option>";
+                                $query3 = "SELECT * from items where item_type='$item_type'";
+                                $result3 = mysqli_query($conn, $query3);
+                                $row3 = mysqli_fetch_all($result3, MYSQLI_ASSOC);
+                                foreach ($row3 as $data) {
+                                    echo "<option value='" . $data['id'] . "'";
+                                    if ($data['id'] == $dataItems) {
+                                        print "selected";
+                                    }
+                                    echo ">" . $data['item'] . "</option>";
+                                }echo "
+                        </select>
+                        <div class='invalid-feedback'>
+                            Please select an item type.
+                        </div>
                     </div>
-                </div>
-                <div class='col-md-4'>
-                    <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add more</button>
-                    <button id='remove' type='button' class='btn btn-danger position-absolute bottom-0 end-0  mr-3 mb-2'>Remove</button>
-                </div>
-            </div>";
+                    <div class='col-md-4'>
+                        <button id='addMore' type='button' class='btn btn-secondary position-absolute bottom-0 start-0 ml-3 mb-2'>Add more</button>
+                        <button id='remove' type='button' class='btn btn-danger position-absolute bottom-0 end-0  mr-3 mb-2'>Remove</button>
+                    </div>
+                </div>";
             }echo "
             <div class='text-center col-md-12'>
                 <button type='submit' class='btn btn-primary mt-2 mb-3'>Save</button>
@@ -335,15 +317,9 @@ function saveRequest()
             $row4 = $result4->fetch_array(MYSQLI_ASSOC);
             $item_type = $row4['item_type'];
             //add the item in each array that correspond
-            if ($item_type == 1) {
-                array_push($array1, $item);
-            }
-            if ($item_type == 2) {
-                array_push($array2, $item);
-            }
-            if ($item_type == 3) {
-                array_push($array3, $item);
-            }
+            if ($item_type == 1) array_push($array1, $item);
+            if ($item_type == 2) array_push($array2, $item);
+            if ($item_type == 3) array_push($array3, $item);
         }
         //create the JSON objet and then the UPDATE
         array_push($arrays, $array1);
@@ -385,7 +361,6 @@ function editRequest()
     $result = $conn->query($query);
     $row = $result->fetch_array(MYSQLI_ASSOC);
     $UserBeforeUpdate=$row['requested_by'];
-    echo $UserBeforeUpdate.':'.$_POST['user'];
     $today = date("Y-m-d");
     //Convert array to string
     $items = implode(',', $_POST['item']);
@@ -413,15 +388,9 @@ function editRequest()
         $row = $result->fetch_array(MYSQLI_ASSOC);
         $item_type = $row['item_type'];
         //add the item in each array that correspond
-        if ($item_type == 1) {
-            array_push($array1, $item);
-        }
-        if ($item_type == 2) {
-            array_push($array2, $item);
-        }
-        if ($item_type == 3) {
-            array_push($array3, $item);
-        }
+        if ($item_type == 1) array_push($array1, $item);
+        if ($item_type == 2) array_push($array2, $item);
+        if ($item_type == 3) array_push($array3, $item);
     }
     //create the JSON objet and then the UPDATE
     array_push($arrays, $array1);
